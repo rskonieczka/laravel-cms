@@ -1,0 +1,31 @@
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,200italic,300italic,400italic,600italic,700italic&subset=latin,latin-ext);
+
+html{
+    min-height:100%;
+}
+body{
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.welcome{
+    border-top:4px solid #f4645f;
+    text-align:center;
+    min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+    min-height: 100vh; /* These two lines are counted as one :-)       */
+    display: flex;
+    align-items: center;
+}
+
+.welcome > div{
+    text-align:center;
+    width:100%;
+}
+
+.welcome h1{
+    font-size: 56px;
+    font-weight: 200;
+}
+.welcome p{
+    font-size: 18px;
+    font-weight: 200;
+}

@@ -3,13 +3,10 @@
 <meta name="author" content="art4webs">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Law 4 Growth</title>
+<title>Laravel - CMS</title>
 {{ HTML::style('front/css/bootstrap.css') }}
-{{ HTML::style('front/css/style.css') }}
+{{ HTML::style('front/css/bootstrap-theme.css') }}
 <!--[if lt IE 9]>
-{{ HTML::script('front/bootstrap/js/html5shiv.min.js') }}
-{{ HTML::script('front//bootstrap/js/respond.min.js') }}
+{{ HTML::script('front/js/html5shiv.min.js') }}
+{{ HTML::script('front/js/respond.min.js') }}
 <![endif]-->
-{{ HTML::script('front/js/modernizr.custom.js') }}
-{{ HTML::script('front/js/device.min.js') }}
-

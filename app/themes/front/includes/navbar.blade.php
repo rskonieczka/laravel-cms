@@ -2,7 +2,7 @@
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header hidden-xs">
             <a class="navbar-brand" href="/">
-            {{ HTML::image('front/images/content/logo.png', 'Law for freedom and growth') }}</a>
+            Project name
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->

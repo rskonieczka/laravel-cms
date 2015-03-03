@@ -9,7 +9,8 @@ Use Modules\Category\Entities\Category;
 Use Modules\Text\Entities\Text;
 use View, Response;
 
-class HomeController extends \BaseController {
+class HomeController extends \BaseController
+{
 
     private $theme;
 
@@ -24,7 +25,8 @@ class HomeController extends \BaseController {
         View::addNamespace('theme', app('path') . '/themes/' . $this->theme);
     }
 
-    public function index($slug = false, $id = false){
+    public function index($slug = false, $id = false)
+    {
         $this->slug = $slug;
         $this->getFromSlug();
         $this->getTexts();
@@ -35,11 +37,10 @@ class HomeController extends \BaseController {
         $this->getGalleries();
 
 
-		if (\Request::ajax() && \Request::root() !== 'http://landing.local')
-		{
-			return (String)View::make("theme::templates.ajax")
-				->with('category', $this->category);
-		}
+        if (\Request::ajax() && \Request::root() !== 'http://landing.local') {
+            return (String)View::make("theme::templates.ajax")
+                ->with('category', $this->category);
+        }
         return View::make("theme::templates.{$this->category->template_file}")
             ->with('category', $this->category);
     }
@@ -48,61 +49,68 @@ class HomeController extends \BaseController {
     {
         $composerName = ucfirst($this->category->template_file) . 'Composer';
 
-        if (\File::exists(app_path().'/composers/'. $composerName.'.php')) {
+        if (\File::exists(app_path() . '/composers/' . $composerName . '.php')) {
             View::composer("theme::templates.{$this->category->template_file}", $composerName);
         }
     }
 
-    private function bindLayoutComposers(){
-        View::composer('theme::includes.mainfooter', function($view){
+    private function bindLayoutComposers()
+    {
+        View::composer('theme::includes.mainfooter', function ($view) {
             $footerPosts = Post::orderBy('created_at', 'desc')->take(8)->get();
             $view->with('footerPosts', $footerPosts);
         });
     }
 
-    private function getFromSlug(){
-        if(!$this->slug)
+    private function getFromSlug()
+    {
+        if (!$this->slug)
             $this->slug = '/';
         $this->category = Category::where(array('slug' => $this->slug, 'site_id' => $this->site_id))->firstOrFail();
     }
 
-    private function getTexts(){
+    private function getTexts()
+    {
         $categoryTexts = Text::where('category_id', $this->category->id)->orderBy('weight')->get();
         $this->category->texts = new \stdClass();
-        foreach($categoryTexts as $text){
+        foreach ($categoryTexts as $text) {
             $key = $text->key;
             $this->category->texts->$key = $text;
         }
 
     }
 
-    private function getGalleries(){
+    private function getGalleries()
+    {
         $categoryGalleries = Gallery::where('category_id', $this->category->id)->orderBy('created_at')->get();
         $this->category->galleries = new \stdClass();
-        foreach($categoryGalleries as $gallery){
+        foreach ($categoryGalleries as $gallery) {
             $key = $gallery->key;
             $this->category->galleries->$key = $gallery->media;
         }
     }
 
-    private function getPosts(){
+    private function getPosts()
+    {
         $this->category->posts = Post::where('category_id', $this->category->id)->orderBy('created_at', 'desc')->get();
     }
 
-    private function getCurrentSite(){
+    private function getCurrentSite()
+    {
         $site = Site::where('domain', \Request::getHost())->first();
-        if(!isset($site)){
+        if (!isset($site)) {
             $site = Site::first();
         }
         $this->site_id = $site->id;
         $this->theme = $site->theme;
     }
 
-    private function buildMainNavbar(){
+    private function buildMainNavbar()
+    {
         $categories = Category::where('parent', 0)
             ->where(array('hide' => 0, 'site_id' => $this->site_id))
             ->orderBy('weight')->get();
-        foreach($categories as  $category){
+        foreach ($categories as $category) {
             $category->childs = Category::where('parent', $category->id)->orderBy('weight')->get();
         }
         $this->category->navbar = $categories;
@@ -113,18 +121,18 @@ class HomeController extends \BaseController {
         return Response::view('theme::errors.missing', array(), 404);
     }
 
-	public function sendEmail(){
-		$data = array(
-			'name' => \Input::get('field.Name.required.text'),
-			'email' => \Input::get('field.Email.required.email'),
-			'state' => \Input::get('field.State.required.text'),
-			'text' => \Input::get('field.Message.required.unknown')
-		);
-		\Mail::send('emails.contactform', $data, function($message)
-		{
-			$message->to('mjedrasz@gmail.com', 'Michal Jedraszczyk')
-				->subject('law4growth.com - contact form');
-		});
-	}
+    public function sendEmail()
+    {
+        $data = array(
+            'name' => \Input::get('field.Name.required.text'),
+            'email' => \Input::get('field.Email.required.email'),
+            'state' => \Input::get('field.State.required.text'),
+            'text' => \Input::get('field.Message.required.unknown')
+        );
+        \Mail::send('emails.contactform', $data, function ($message) {
+            $message->to('mjedrasz@gmail.com', 'Michal Jedraszczyk')
+                ->subject('contact form');
+        });
+    }
 
 }
