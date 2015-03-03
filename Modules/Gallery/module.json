@@ -1,0 +1,23 @@
+{
+    "name": "Gallery",
+    "alias": "gallery",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "core": 0,
+    "menu": {
+        "media": {
+            "admin.gallery.index": "Galerie"
+        }
+    },
+    "required": [
+        "Site",
+        "Category",
+        "media"
+    ],
+    "priority": 0,
+    "providers": [],
+    "files": [
+        "start.php"
+    ]
+}

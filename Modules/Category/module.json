@@ -1,0 +1,22 @@
+{
+    "name": "Category",
+    "alias": "category",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "priority": 1,
+    "editable": 0,
+    "core": 1,
+    "menu": {
+        "content": {
+            "admin.category.index": "Kategorie"
+        }
+    },
+    "required": [
+        "Site"
+    ],
+    "providers": [],
+    "files": [
+        "start.php"
+    ]
+}

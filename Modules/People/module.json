@@ -1,0 +1,21 @@
+{
+    "name": "People",
+    "alias": "people",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "priority": 10,
+    "menu": {
+    "content": {
+        "admin.people.index": "Uczestnicy"
+    }
+},
+    "required": [
+        "Site",
+        "Category"
+    ],
+    "providers": [],
+    "files": [
+        "start.php"
+    ]
+}

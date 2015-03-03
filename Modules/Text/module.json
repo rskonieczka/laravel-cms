@@ -1,0 +1,23 @@
+{
+    "name": "Text",
+    "alias": "text",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "core": 0,
+    "group": "content",
+    "required": [
+        "Site",
+        "Category"
+    ],
+    "menu": {
+        "content": {
+            "admin.text.index": "Teksty"
+        }
+    },
+    "priority": 2,
+    "providers": [],
+    "files": [
+        "start.php"
+    ]
+}

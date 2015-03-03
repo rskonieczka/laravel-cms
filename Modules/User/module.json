@@ -1,0 +1,22 @@
+{
+    "name": "User",
+    "alias": "user",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "priority": 0,
+    "core": 1,
+    "menu": {
+        "people": {
+                "admin.user.index": "Użytkownicy"
+        }
+    },
+    "required": [
+        "Site",
+        "Category"
+    ],
+    "providers": [],
+    "files": [
+        "start.php"
+    ]
+}

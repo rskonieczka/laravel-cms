@@ -1,0 +1,21 @@
+{
+    "name": "Site",
+    "alias": "site",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "priority": 0,
+    "core": 1,
+    "menu": {
+        "settings": {
+            "admin.site.index": "Strony"
+        }
+    },
+    "required": [
+        "Category"
+    ],
+    "providers": [],
+    "files": [
+        "start.php"
+    ]
+}
