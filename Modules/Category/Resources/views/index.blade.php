@@ -41,7 +41,7 @@
                         <div class="nav-tabs-custom">
                             <ul class="nav nav-tabs">
                             @foreach ($nestable as $n)
-                                    <li @if (Str::snake($n['site']->name) == 'default') class="active" @endif>
+                                    <li @if (Str::snake($n['site']->name) == 'front') class="active" @endif>
                                         <a href="#{{ Str::snake($n['site']->name) }}" aria-controls="home" role="tab" data-toggle="tab">{{ $n['site']->name }}</a>
                                     </li>
                             @endforeach
@@ -49,7 +49,7 @@
                             </ul>
                             <div class="tab-content">
                                 @foreach ($nestable as $n)
-                                <div class="tab-pane @if (Str::snake($n['site']->name) == 'default') active @endif" id="{{ Str::snake($n['site']->name) }}">
+                                <div class="tab-pane @if (Str::snake($n['site']->name) == 'front') active @endif" id="{{ Str::snake($n['site']->name) }}">
                                     <div class="dd" id="nestable{{ $n['site']->id }}">
                                       {{ $n['nestable'] }}
                                     </div>

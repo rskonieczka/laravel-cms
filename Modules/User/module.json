@@ -8,7 +8,8 @@
     "core": 1,
     "menu": {
         "people": {
-                "admin.user.index": "Użytkownicy"
+                "admin.user.index": "Użytkownicy",
+                "admin.group.index": "Grupy"
         }
     },
     "required": [

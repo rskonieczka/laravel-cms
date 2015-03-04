@@ -7,9 +7,10 @@ use Modules\Gallery\Entities\Gallery;
 Use Modules\Site\Entities\Site;
 Use Modules\Category\Entities\Category;
 Use Modules\Text\Entities\Text;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use View, Response;
 
-class HomeController extends \BaseController
+class FrontController extends \BaseController
 {
 
     private $theme;
@@ -66,7 +67,9 @@ class HomeController extends \BaseController
     {
         if (!$this->slug)
             $this->slug = '/';
+
         $this->category = Category::where(array('slug' => $this->slug, 'site_id' => $this->site_id))->firstOrFail();
+
     }
 
     private function getTexts()

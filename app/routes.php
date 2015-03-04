@@ -11,7 +11,6 @@
 */
 // Admin routes
 Route::group(array('prefix' => 'admin', 'namespace' => 'App\Controllers\Admin', 'before' => 'auth.login'), function () {
-
     Route::any('dashboard/view', array('as' => 'admin.dashboard.view', 'uses' => 'DashboardController@getView'));
 	Route::any('user/list', array('as' => 'admin.user.list', 'uses' => 'UserController@getList'));
 
@@ -23,4 +22,4 @@ Route::group(array('prefix' => 'admin', 'namespace' => 'App\Controllers\Admin', 
 
 Route::any('send-email', array('uses' => 'App\Controllers\HomeController@sendEmail'));
 Route::any('validateSurveyForm', array('uses' => 'App\Controllers\AjaxLandingController@validateSurveyForm'));
-Route::any('{slug?}/{id?}/{slug2?}', array('uses' => 'App\Controllers\HomeController@index'));
+Route::any('{slug?}/{id?}/{slug2?}', array('uses' => 'App\Controllers\FrontController@index'));

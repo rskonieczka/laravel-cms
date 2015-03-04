@@ -3,9 +3,11 @@
 Route::post('user/autocreate', array('as' => 'user.autocreate', 'uses' => 'UserController@createFromEmail'));
 
 Route::group(array('prefix' => 'admin', 'namespace' => 'Modules\User\Http\Controllers', 'before' => 'auth.login'), function () {
-    // Text routing
+    // User routing
     Route::get('user/datatable', array('as' => 'admin.user.datatable', 'uses' => 'UserController@getDatatable'));
+    Route::get('group/datatable', array('as' => 'admin.group.datatable', 'uses' => 'GroupController@getDatatable'));
     Route::resource('user', 'UserController');
+    Route::resource('group', 'GroupController');
 });
 
 

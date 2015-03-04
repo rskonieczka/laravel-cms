@@ -1,5 +1,15 @@
 <?php
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
+
+App::error(function(ModelNotFoundException $e)
+{
+    if($e->getModel() === 'Modules\Category\Entities\Category'){
+        return View::make('theme::templates.404');
+    }
+});
+
 /*
 |--------------------------------------------------------------------------
 | Application & Route Filters
@@ -83,3 +93,4 @@ Route::filter('csrf', function()
 		throw new Illuminate\Session\TokenMismatchException;
 	}
 });
+
