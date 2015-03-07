@@ -66,7 +66,7 @@ class AuthController extends AdminController
             else
                 Sentry::authenticate($credentials, false);
 
-            return Redirect::route('dashboard.view');
+            return Redirect::route('admin.dashboard.view');
 
             } catch (\Exception $e) {
             return Redirect::route('auth.login')->withErrors(array('login' => $e->getMessage()));

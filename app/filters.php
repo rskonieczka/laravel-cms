@@ -54,12 +54,12 @@ Route::filter('auth.login', function () {
 
 });
 
-Route::filter('auth.checkout', function () {
+/*Route::filter('auth.checkout', function () {
     $user = Sentry::getUser()->hasAnyAccess(['backend']);
     if ($user) {
         return Redirect::route('admin.dashboard.view');
     }
-});
+});*/
 
 /*
 |--------------------------------------------------------------------------
