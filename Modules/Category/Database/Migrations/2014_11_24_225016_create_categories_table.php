@@ -23,6 +23,12 @@ class CreateCategoriesTable extends Migration
             $table->integer('hide');
             $table->timestamps();
         });
+
+        Schema::create('categories_groups', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('category_id');
+            $table->integer('group_id');
+        });
     }
 
     /**

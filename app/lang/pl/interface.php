@@ -14,6 +14,8 @@ return array(
     */
 
     "404" => "404 - brak strony",
-    "404desc" => "strony o podanym adresie nie znaleziono"
+    "404desc" => "strony o podanym adresie nie znaleziono",
+    "403" => "403",
+    "403desc" => "nie posiadasz praw do przeglądania tej strony"
 
 );

@@ -14,6 +14,8 @@ return array(
     */
 
     "404" => "404 - page not found",
-    "404desc" => "page not found"
+    "404desc" => "page not found",
+    "403" => "403",
+    "403desc" => "you dont have permission to view that page"
 
 );

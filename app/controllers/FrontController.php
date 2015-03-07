@@ -7,7 +7,6 @@ use Modules\Gallery\Entities\Gallery;
 Use Modules\Site\Entities\Site;
 Use Modules\Category\Entities\Category;
 Use Modules\Text\Entities\Text;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use View, Response;
 
 class FrontController extends \BaseController
@@ -69,7 +68,27 @@ class FrontController extends \BaseController
             $this->slug = '/';
 
         $this->category = Category::where(array('slug' => $this->slug, 'site_id' => $this->site_id))->firstOrFail();
+        $this->checkRightToView();
 
+    }
+
+
+
+    private function checkRightToView()
+    {
+        $user = \Sentry::getUser();
+        // Guest - not logged
+        if (!$user){
+            if ($this->category->groups->isEmpty())
+                return \App::abort(403, 'Unauthorized action.');
+            return true;
+        }
+        $user_groups = $user->groups->toArray();
+        foreach($user_groups as $group){
+            if(in_array($group['id'], $this->category->groups->lists('id')))
+                return true;
+        }
+        return \App::abort(403, 'Unauthorized action.');
     }
 
     private function getTexts()

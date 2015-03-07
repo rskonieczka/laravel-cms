@@ -12,7 +12,8 @@
         "bllim/datatables": "*",
         "devfactory/imagecache": "2.0.*",
         "pingpong/modules": "~1",
-        "mockery/mockery": "dev-master@dev"
+        "mockery/mockery": "dev-master@dev",
+		"schickling/backup": "0.6.*"
 	},
 	"autoload": {
 		"classmap": [

@@ -9,7 +9,6 @@ Use Redirect, Input, Sentry;
 
 class AuthController extends AdminController
 {
-
     /**
      * @return \Illuminate\Http\RedirectResponse
      */

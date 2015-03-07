@@ -64,6 +64,15 @@
                             {{ Form::text('weight', $category->weight, array('class' => 'form-control', 'id' => 'weight', 'placeholder' => 'Waga') ) }}
                             @if ($errors->has('weight')) <p class="help-block">{{ $errors->first('weight') }}</p> @endif
                         </div>
+                        <div class="form-group">
+                            <label>Widoczność kategorii</label><br />
+                            @foreach ($user_groups as $group)
+                                <label for="{{ $group->name }}">
+                                <input id="{{ $group->name }}" type="checkbox" name="groups[{{ $group->id }}]" value="1" @if (in_array($group->id, $category->groups->lists('id'))) checked @endif>
+                                    {{ $group->name }}
+                                </label><br />
+                            @endforeach
+                        </div>
                         {{ Form::button('Dodaj', array('class' => 'btn btn-success btn-flat', 'type' => 'submit') ) }}
                     </div>
                     {{ Form::close() }}

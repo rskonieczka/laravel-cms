@@ -47,9 +47,13 @@ class CategoryController extends AdminController
         $site_select = $sites->lists('name', 'id');
 
         $templates = templatesList();
+
+        $user_groups = \Sentry::findAllGroups();
+
         return View::make('category::create')
             ->with('select', $select)
             ->with('templates', $templates)
+            ->with('user_groups', $user_groups)
             ->with('site_select', $site_select);
     }
 
@@ -99,6 +103,19 @@ class CategoryController extends AdminController
             );
             $category = $this->category->create($data);
             $category->save();
+
+            $category_group = array();
+            if(Input::get('groups')){
+                foreach(Input::get('groups') as $group_id => $value){
+                    $category_group[] = array(
+                        'category_id' => $category->id,
+                        'group_id' => $group_id
+                    );
+                }
+            }
+            $category->groups()->sync($category_group);
+            $category->push();
+
             return Redirect::route('admin.category.index')->with('message', 'Dodano nową kategorię ' . $category->name);
         }
     }
@@ -150,11 +167,14 @@ class CategoryController extends AdminController
         $site_select = $sites->lists('name', 'id');
 
         $category = $this->category->find($id);
+        $user_groups = \Sentry::findAllGroups();
+
         $templates = templatesList();
         return View::make('category::edit')
             ->with('category', $category)
             ->with('select', $select)
             ->with('site_select', $site_select)
+            ->with('user_groups', $user_groups)
             ->with('templates', $templates);
     }
 
@@ -182,6 +202,19 @@ class CategoryController extends AdminController
             $category->site_id = Input::get('site_id');
             $category->template_file = Input::get('template_file');
             $category->save();
+
+            $category_group = array();
+            if(Input::get('groups')){
+                foreach(Input::get('groups') as $group_id => $value){
+                    $category_group[] = array(
+                        'category_id' => $category->id,
+                        'group_id' => $group_id
+                    );
+                }
+            }
+            $category->groups()->sync($category_group);
+            $category->push();
+
             return Redirect::route('admin.category.index')->with('message', 'Edytowano kategorię - ' . $category->name);
 
         }

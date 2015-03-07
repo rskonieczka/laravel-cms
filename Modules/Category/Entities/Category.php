@@ -50,6 +50,11 @@ class Category extends \Basemodel
         return $nestables;
     }
 
+    public function groups()
+    {
+        return $this->belongsToMany('Modules\User\Entities\Group', 'categories_groups', 'category_id', 'group_id');
+    }
+
     public function buildMenu($menu, $parentid = 0, $slug = '')
     {
         $result = null;

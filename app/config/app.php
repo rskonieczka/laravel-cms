@@ -128,6 +128,7 @@ return array(
         'Intervention\Image\ImageServiceProvider',
         'Devfactory\Imagecache\ImagecacheServiceProvider',
         'Pingpong\Modules\ModulesServiceProvider',
+        'Schickling\Backup\BackupServiceProvider',
         'Artforwebs\Ankietkaapi\AnkietkaapiServiceProvider'
 	),
 

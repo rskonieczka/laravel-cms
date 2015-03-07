@@ -3,11 +3,14 @@
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 
-App::error(function(ModelNotFoundException $e)
-{
-    if($e->getModel() === 'Modules\Category\Entities\Category'){
-        return View::make('theme::templates.404');
+App::error(function (ModelNotFoundException $e) {
+    if ($e->getModel() === 'Modules\Category\Entities\Category') {
+        return View::make('404');
     }
+});
+
+App::error(function ($e) {
+    return View::make('403');
 });
 
 /*
@@ -21,15 +24,13 @@ App::error(function(ModelNotFoundException $e)
 |
 */
 
-App::before(function($request)
-{
-	//
+App::before(function ($request) {
+    //
 });
 
 
-App::after(function($request, $response)
-{
-	//
+App::after(function ($request, $response) {
+    //
 });
 
 /*
@@ -43,18 +44,19 @@ App::after(function($request, $response)
 |
 */
 
-Route::filter('auth.login', function()
-{
-    if ( ! Sentry::check())
-    {
+Route::filter('auth.login', function () {
+    $user = Sentry::getUser();
+    if (!$user) {
         return Redirect::route('auth.login');
+    } elseif (!$user->hasAnyAccess(['backend'])) {
+        return \App::abort(403, 'Unauthorized action.');
     }
+
 });
 
-Route::filter('auth.checkout', function()
-{
-    if ( Sentry::check())
-    {
+Route::filter('auth.checkout', function () {
+    $user = Sentry::getUser()->hasAnyAccess(['backend']);
+    if ($user) {
         return Redirect::route('admin.dashboard.view');
     }
 });
@@ -70,9 +72,8 @@ Route::filter('auth.checkout', function()
 |
 */
 
-Route::filter('guest', function()
-{
-	if (Auth::check()) return Redirect::to('/');
+Route::filter('guest', function () {
+    if (Auth::check()) return Redirect::to('/');
 });
 
 /*
@@ -86,11 +87,9 @@ Route::filter('guest', function()
 |
 */
 
-Route::filter('csrf', function()
-{
-	if (Session::token() !== Input::get('_token'))
-	{
-		throw new Illuminate\Session\TokenMismatchException;
-	}
+Route::filter('csrf', function () {
+    if (Session::token() !== Input::get('_token')) {
+        throw new Illuminate\Session\TokenMismatchException;
+    }
 });
 
