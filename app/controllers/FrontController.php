@@ -76,12 +76,13 @@ class FrontController extends \BaseController
 
     private function checkRightToView()
     {
+        if($this->category->groups->isEmpty())
+            return true;
+
         $user = \Sentry::getUser();
         // Guest - not logged
         if (!$user){
-            if ($this->category->groups->isEmpty())
-                return \App::abort(403, 'Unauthorized action.');
-            return true;
+            return \App::abort(403, 'Unauthorized action.');
         }
         $user_groups = $user->groups->toArray();
         foreach($user_groups as $group){
@@ -94,6 +95,12 @@ class FrontController extends \BaseController
     private function getTexts()
     {
         $categoryTexts = Text::where('category_id', $this->category->id)->orderBy('weight')->get();
+
+        if($categoryTexts->isEmpty()){
+            $this->category->texts = null;
+            return false;
+        }
+
         $this->category->texts = new \stdClass();
         foreach ($categoryTexts as $text) {
             $key = $text->key;
@@ -105,7 +112,13 @@ class FrontController extends \BaseController
     private function getGalleries()
     {
         $categoryGalleries = Gallery::where('category_id', $this->category->id)->orderBy('created_at')->get();
-        $this->category->galleries = new \stdClass();
+
+        if($categoryGalleries->isEmpty()){
+            $this->category->galleries = null;
+            return false;
+        }
+
+        $this->category->galleries = new  \stdClass();
         foreach ($categoryGalleries as $gallery) {
             $key = $gallery->key;
             $this->category->galleries->$key = $gallery->media;
