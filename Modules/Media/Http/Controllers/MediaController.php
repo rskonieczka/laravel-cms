@@ -41,12 +41,32 @@ class MediaController extends AdminController
                     $url = \URL::to("/uploads/media/{$row->filename}");
                     return "<div id=\"geturl\" data-url=\"$url\">$thumb</div>";
                 }
-                else
-                    return "-";
+                else{
+                    $url = \URL::to("/uploads/media/{$row->filename}");
+                    return "<div id=\"geturl\" data-url=\"$url\">{$row->filename}</div>";
+                }
             })
             ->add_column('operations', function($row){
                 if($this->dt_param === 'selectable'){
                      return "<button class='btn btn-flat btn-sm btn-success' id='add' style='padding:1px 5px;'><i class=\"fa fa-share\"></i></button>";
+                }
+                $url = \URL::route( 'admin.media.destroy', array( $row->id ));
+                return "
+                    <a data-method=\"delete\" data-confirm=\"Czy napewno usunąć plik?\" class=\"btn btn-sm btn-flat btn-danger\" href=\"$url\">Usuń</a>
+                    ";
+
+            })
+            ->make();
+    }
+
+    public function getDatatablefiles($param = false)
+    {
+        $this->dt_param = $param;
+        $media = $this->media->select('media.id', 'media.name', 'media.type as filetype', 'media.created_at');
+        return \Datatables::of($media)
+            ->add_column('operations', function($row){
+                if($this->dt_param === 'selectable'){
+                    return "<button class='btn btn-flat btn-sm btn-success' id='add' style='padding:1px 5px;'><i class=\"fa fa-share\"></i></button>";
                 }
                 $url = \URL::route( 'admin.media.destroy', array( $row->id ));
                 return "
@@ -76,15 +96,10 @@ class MediaController extends AdminController
      */
     public function store()
     {
-        $fileData = $this->uploadFile();
-        if (is_array($fileData)) {
-            $media = $this->media->create($fileData);
-            $media->save();
-            return Redirect::route('admin.media.index')->with('message', 'Dodano nowy plik ' . $media->name);
+        foreach(\Input::file('files') as $file){
+            $this->media->create(['file' => $file, 'directory' => 'media']);
         }
-        return Redirect::route('admin.media.index')
-            ->withErrors('Nieporawny rozmiar lub format pliku');
-
+        return Redirect::route('admin.media.index')->with('message', 'Dodano nowy pliki');
     }
 
     /**
@@ -140,32 +155,6 @@ class MediaController extends AdminController
             return Redirect::route('admin.media.index')->with('message', 'Usunięto plik ' . $media->name);
         }
         return Redirect::route('admin.media.index')->with('error', 'Nie można zlokalizować pliku: ' . $filepath);
-    }
-
-    private function uploadFile()
-    {
-        $destinationPath = public_path() . '/uploads/media';
-        $file = \Input::file('file');
-        if (!isset($file))
-            return false;
-
-        if ($file->isValid()) {
-            $realname = str_random(12);
-            $name = $file->getClientOriginalName();
-            $type = $file->getClientOriginalExtension();
-            $upload_success = $file->move($destinationPath, $realname . '.' . $type);
-
-            if ($upload_success) {
-                return array(
-                    'name' => $name,
-                    'realname' => $realname.'.'.$type,
-                    'type' => $type);
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
     }
 
 }

@@ -39,15 +39,25 @@
                             {{ Form::text('name', $category->name, array('class' => 'form-control', 'id' => 'name', 'placeholder' => 'Nazwa') ) }}
                             @if ($errors->has('name')) <p class="help-block">{{ $errors->first('name') }}</p> @endif
                         </div>
-                        <div class="form-group @if ($errors->has('parent')) has-error @endif">
-                            {{ Form::label('parent', 'Rodzic') }}
-                            {{ Form::select('parent', $select, $category->parent, array('class' => 'form-control', 'id' => 'parent', 'placeholder' => 'Rodzic')) }}
-                            @if ($errors->has('parent')) <p class="help-block">{{ $errors->first('parent') }}</p> @endif
-                        </div>
                         <div class="form-group @if ($errors->has('site_id')) has-error @endif">
                             {{ Form::label('site_id', 'Strona') }}
                             {{ Form::select('site_id', $site_select, $category->site_id, array('class' => 'form-control', 'id' => 'site_id', 'placeholder' => 'Strona')) }}
                             @if ($errors->has('site_id')) <p class="help-block">{{ $errors->first('site_id') }}</p> @endif
+                        </div>
+                        <div class="form-group @if ($errors->has('lang')) has-error @endif">
+                            {{ Form::label('lang', 'Język') }}
+                            {{ Form::select('lang', ['en' => 'en', 'pl' => 'pl', 'de' => 'de', 'ru' => 'ru', 'ch' => 'ch', 'fr' => 'fr'], $category->lang, array('class' => 'form-control', 'id' => 'lang')) }}
+                            @if ($errors->has('lang')) <p class="help-block">{{ $errors->first('lang') }}</p> @endif
+                        </div>
+                        <div class="form-group @if ($errors->has('parent')) has-error @endif">
+                            {{ Form::label('parent', 'Rodzic') }}
+                            {{ Form::select('parent', $select, $category->parent, array('class' => 'form-control', 'id' => 'select2', 'placeholder' => 'Rodzic')) }}
+                            @if ($errors->has('parent')) <p class="help-block">{{ $errors->first('parent') }}</p> @endif
+                        </div>
+                        <div class="form-group @if ($errors->has('device')) has-error @endif">
+                            {{ Form::label('device', 'Urządzenia') }}
+                            {{ Form::select('device', ['all' => 'wszystkie', 'mobile' => 'mobilne', 'desktop' => 'desktop'], $category->device, array('class' => 'form-control', 'id' => 'select2')) }}
+                            @if ($errors->has('device')) <p class="help-block">{{ $errors->first('device') }}</p> @endif
                         </div>
                         <div class="form-group @if ($errors->has('template_file')) has-error @endif">
                             {{ Form::label('template_file', 'Szablon') }}
@@ -83,4 +93,9 @@
     </section><!-- /.content -->
 </aside><!-- /.right-side -->
 
+@stop
+@section('extrascripts')
+    <script type="text/javascript">
+        $(document).ready(function() { $("#select2").select2(); });
+    </script>
 @stop

@@ -28,7 +28,7 @@
                     {{ Form::open(array('route' => 'admin.text.store')) }}
                     {{ Form::token() }}
                     <div class="pull-right right-buttons">
-                        <a href="{{ URL::route('admin.category.index') }}" class="btn btn-sm btn-flat btn-primary">Wróć do listy</a>
+                        <a href="{{ URL::route('admin.text.index') }}" class="btn btn-sm btn-flat btn-primary">Wróć do listy</a>
                     </div>
                     <div class="box-body">
                         <div class="box-header">
@@ -42,7 +42,7 @@
                         </div>
                         <div class="form-group @if ($errors->has('category_id')) has-error @endif">
                             {{ Form::label('category_id', 'Kategoria') }}
-                            {{ Form::select('category_id', $select, Input::old('category_id'), array('class' => 'form-control', 'id' => 'parent')) }}
+                            {{ Form::select('category_id', $select, Input::old('category_id'), array('class' => 'form-control', 'id' => 'select2')) }}
                             @if ($errors->has('category_id')) <p class="help-block">{{ $errors->first('category_id') }}</p> @endif
                         </div>
                         <div class="form-group @if ($errors->has('slug')) has-error @endif">
@@ -75,5 +75,6 @@
 @section('extrascripts')
 <script type="text/javascript">
     CKEDITOR.replace('wysihtml5');
+    $(document).ready(function() { $("#select2").select2(); });
 </script>
 @stop

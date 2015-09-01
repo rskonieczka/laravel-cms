@@ -38,7 +38,9 @@
                                 <tr>
                                     <td>
                                         <div id="geturl" data-url="{{ \URL::to("/uploads/media/{$item->realname}") }}">
-                                            {{ \Imagecache::get('media/'.$item->realname, 'medialist')->img; }}
+                                            @if($item->type == 'jpg' || $item->type == 'jpeg' || $item->type == 'png')
+                                                {{ \Imagecache::get('media/'.$item->realname, 'medialist')->img; }}
+                                            @endif
                                         </div>
                                         <input type="hidden" name="photo[{{ $item->id }}][media_id]" value="{{ $item->id }}">
                                     </td>

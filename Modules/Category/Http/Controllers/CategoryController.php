@@ -39,9 +39,25 @@ class CategoryController extends AdminController
      */
     public function create()
     {
-        $categories = $this->category->all();
-        $select = array(0 => '-');
-        $select = $select + $categories->lists('name', 'id');
+        $categories = $this->category->where('parent', 0)->orderBy('site_id', 'asc')->orderBy('lang', 'asc')->orderBy('weight', 'asc')->get()->toArray();
+        foreach ($categories as $category) {
+            $site = $this->site->where('id', $category['site_id'])->first()->toArray();
+            $cat[$category['id']] = $site['name'] . ' -> ' . $category['lang'] . ' - ' . $category['name'];
+            $childs = $this->category->where('parent', $category['id'])->get()->toArray();
+            if (!empty($childs)) {
+                foreach ($childs as $k => $child) {
+                    $cat[$child['id']] = $site['name'] . ' -> ' . $category['lang'] . '- ' . $category['name'] . ' - ' . $child['name'];
+                    $childss = $this->category->where('parent', $child['id'])->get()->toArray();
+                    if (!empty($childss)) {
+                        foreach ($childss as $k => $child2) {
+                            $cat[$child2['id']] = $site['name'] . ' -> ' . $category['lang'] . '- ' . $category['name'] . ' - '.$child['name'].' - ' . $child2['name'];
+                        }
+                    }
+                }
+            }
+        }
+        $select = array( 0 => '-' );
+        $select = $select + $cat;
 
         $sites = $this->site->all();
         $site_select = $sites->lists('name', 'id');
@@ -99,6 +115,8 @@ class CategoryController extends AdminController
                 'weight' => Input::get('weight'),
                 'parent' => Input::get('parent'),
                 'site_id' => Input::get('site_id'),
+                'lang' => Input::get('lang'),
+                'device' => Input::get('device'),
                 'template_file' => Input::get('template_file'),
             );
             $category = $this->category->create($data);
@@ -159,9 +177,25 @@ class CategoryController extends AdminController
     public function edit($id)
     {
 
-        $categories = $this->category->all();
-        $select = array(0 => '-');
-        $select = $select + $categories->lists('name', 'id');
+        $categories = $this->category->where('id', '!=', $id)->where('parent', 0)->orderBy('site_id', 'asc')->orderBy('lang', 'asc')->orderBy('weight', 'asc')->get()->toArray();
+        foreach ($categories as $category) {
+            $site = $this->site->where('id', $category['site_id'])->first()->toArray();
+            $cat[$category['id']] = $site['name'] . ' -> ' . $category['lang'] . ' - ' . $category['name'];
+            $childs = $this->category->where('parent', $category['id'])->get()->toArray();
+            if (!empty($childs)) {
+                foreach ($childs as $k => $child) {
+                    $cat[$child['id']] = $site['name'] . ' -> ' . $category['lang'] . '- ' . $category['name'] . ' - ' . $child['name'];
+                    $childss = $this->category->where('parent', $child['id'])->get()->toArray();
+                    if (!empty($childss)) {
+                        foreach ($childss as $k => $child2) {
+                            $cat[$child2['id']] = $site['name'] . ' -> ' . $category['lang'] . '- ' . $category['name'] . ' - '.$child['name'].' - ' . $child2['name'];
+                        }
+                    }
+                }
+            }
+        }
+        $select = array( 0 => '-' );
+        $select = $select + $cat;
 
         $sites = $this->site->all();
         $site_select = $sites->lists('name', 'id');
@@ -193,13 +227,14 @@ class CategoryController extends AdminController
             return Redirect::route('admin.category.edit')
                 ->withErrors($validator);
         } else {
-
             $category = $this->category->find($id);
             $category->name = Input::get('name');
             $category->slug = Input::get('slug');
             $category->weight = Input::get('weight');
             $category->parent = Input::get('parent');
             $category->site_id = Input::get('site_id');
+            $category->lang = Input::get('lang');
+            $category->device = Input::get('device');
             $category->template_file = Input::get('template_file');
             $category->save();
 

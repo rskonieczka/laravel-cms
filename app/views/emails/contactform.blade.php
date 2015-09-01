@@ -4,13 +4,11 @@
 		<meta charset="utf-8">
 	</head>
 	<body>
-		<h2>Contactform message from website</h2>
-
+		<h2>Formularz kontaktowy ze strony internetowej</h2>
 		<div>
-		    <strong>e-mail:</strong> {{ $email }}<br />
-			<strong>Name:</strong> {{ $name }}<br />
-			<strong>State:</strong> {{ $state }}<br />
-			<strong>message:</strong> {{ $text }}<br />
+		    <strong>Imie i nazwisko:</strong> {{ $name }}<br />
+            <strong>Adres email:</strong> {{ $email }}<br />
+            <strong>Treść:</strong> {{ $content }}<br />
 		</div>
 	</body>
 </html>

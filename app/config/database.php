@@ -29,6 +29,7 @@ return array(
 	'default' => 'mysql',
 
 	/*
+
 	|--------------------------------------------------------------------------
 	| Database Connections
 	|--------------------------------------------------------------------------
@@ -53,15 +54,26 @@ return array(
 		),
 
 		'mysql' => array(
-			'driver'    => 'mysql',
-			'host'      => 'localhost',
-			'database'  => 'laravelcms',
-			'username'  => 'root',
-			'password'  => '',
-			'charset'   => 'utf8',
-			'collation' => 'utf8_general_ci',
-			'prefix'    => '',
-		),
+            'driver'    => 'mysql',
+            'host'      => '10.10.29.81',
+            'database'  => 'novol',
+            'username'  => 'root',
+            'password'  => '',
+            'charset'   => 'utf8',
+            'collation' => 'utf8_general_ci',
+            'prefix'    => '',
+        ),
+
+        'mysql2' => array(
+            'driver'    => 'mysql',
+            'host'      => 'localhost',
+            'database'  => 'professional',
+            'username'  => 'root',
+            'password'  => '',
+            'charset'   => 'utf8',
+            'collation' => 'utf8_general_ci',
+            'prefix'    => '',
+        ),
 
         /*'mysql' => array(
             'driver'    => 'mysql',

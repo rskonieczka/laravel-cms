@@ -15,5 +15,6 @@
         </div>
         @include('includes.scripts')
         @yield('extrascripts')
+        @yield('extrascripts2')
     </body>
 </html>

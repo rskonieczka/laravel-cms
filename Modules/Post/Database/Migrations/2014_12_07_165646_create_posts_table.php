@@ -18,6 +18,9 @@ class CreatePostsTable extends Migration
             $table->string('title', 100);
             $table->string('photo', 200);
             $table->text('content');
+            $table->text('tags');
+            $table->text('badges');
+            $table->text('parameters');
             $table->integer('category_id');
             $table->timestamps();
             $table->engine = 'MyISAM';

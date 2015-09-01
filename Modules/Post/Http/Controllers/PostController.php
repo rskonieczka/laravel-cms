@@ -6,17 +6,28 @@ use Illuminate\Support\Facades\View;
 Use App\Controllers\Admin\AdminController;
 Use Modules\Post\Entities\Post;
 Use Modules\Category\Entities\Category;
+use Modules\Site\Entities\Site;
 Use Redirect, Validator, Input;
 
 class PostController extends AdminController
 {
 
     private $post;
+    /**
+     * @var Category
+     */
+    private $category;
+    /**
+     * @var Site
+     */
+    private $site;
 
-    public function __construct(Post $post)
+    public function __construct(Post $post, Category $category, Site $site)
     {
         parent::__construct();
         $this->post = $post;
+        $this->category = $category;
+        $this->site = $site;
     }
     /**
      * Display a listing of the resource.
@@ -52,9 +63,20 @@ class PostController extends AdminController
      */
     public function create()
     {
-        $categories = Category::all();
+
+        $categories = $this->category->where('parent', 0)->orderBy('site_id', 'asc')->orderBy('lang', 'asc')->orderBy('weight', 'asc')->get()->toArray();
+        foreach($categories as $category){
+            $site = $this->site->where('id', $category['site_id'])->first()->toArray();
+            $cat[$category['id']] = $site['name'].' -> '.$category['lang'].' - '.$category['name'];
+            $childs = $this->category->where('parent', $category['id'])->get()->toArray();
+            if(!empty($childs)){
+                foreach($childs as $k => $child){
+                    $cat[$child['id']] = $site['name'].' -> '.$category['lang'].' --- '.$child['name'];
+                }
+            }
+        }
         $select = array( 0 => '-' );
-        $select = $select + $categories->lists('name','id');
+        $select = $select + $cat;
 
         return View::make('post::create')->with('select', $select );
     }
@@ -77,6 +99,9 @@ class PostController extends AdminController
                 'title' => Input::get('title'),
                 'content' => Input::get('content'),
                 'category_id' => Input::get('category_id'),
+                'tags' => Input::get('tags'),
+                'badges' => Input::get('badges'),
+                'parameters' => Input::get('parameters'),
                 'photo' => $this->uploadFile()
             );
             $post = $this->post->create($data);
@@ -94,9 +119,19 @@ class PostController extends AdminController
      */
     public function edit($id)
     {
-        $categories = Category::all();
+        $categories = $this->category->where('id', '!=', $id)->where('parent', 0)->orderBy('site_id', 'asc')->orderBy('lang', 'asc')->orderBy('weight', 'asc')->get()->toArray();
+        foreach($categories as $category){
+            $site = $this->site->where('id', $category['site_id'])->first()->toArray();
+            $cat[$category['id']] = $site['name'].' -> '.$category['lang'].' - '.$category['name'];
+            $childs = $this->category->where('id', '!=', $id)->where('parent', $category['id'])->get()->toArray();
+            if(!empty($childs)){
+                foreach($childs as $k => $child){
+                    $cat[$child['id']] = $site['name'].' -> '.$category['lang'].' --- '.$child['name'];
+                }
+            }
+        }
         $select = array( 0 => '-' );
-        $select = $select + $categories->lists('name','id');
+        $select = $select + $cat;
 
         $post = $this->post->find($id);
         return View::make('post::edit')->with('post', $post)->with('select', $select);
@@ -113,7 +148,7 @@ class PostController extends AdminController
     {
         $validator = Validator::make(Input::all(), $this->post->rules);
         if ($validator->fails()) {
-            return Redirect::route('admin.post.edit')
+            return Redirect::route('admin.post.edit', ['id' => $id])
                 ->withErrors($validator);
         } else {
 
@@ -121,6 +156,9 @@ class PostController extends AdminController
             $post->title = Input::get('title');
             $post->content = Input::get('content');
             $post->category_id = Input::get('category_id');
+            $post->tags = Input::get('tags');
+            $post->badges = Input::get('badges');
+            $post->parameters = Input::get('parameters');
             $post->photo = $this->uploadFile($post->photo);
             $post->save();
 

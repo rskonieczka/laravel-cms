@@ -1052,3 +1052,5 @@ $(window).load(function() {
         })
     }
 })(window.jQuery || window.Zepto);
+
+CKEDITOR.config.allowedContent = true;

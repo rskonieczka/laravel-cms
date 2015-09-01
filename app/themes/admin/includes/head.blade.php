@@ -10,6 +10,9 @@
 {{ HTML::style('admin/css/daterangepicker/daterangepicker-bs3.css') }}
 {{ HTML::style('admin/css/datatables/dataTables.bootstrap.css') }}
 {{ HTML::style('admin/css/dropzone.css') }}
+{{ HTML::style('admin/css/select2.css') }}
+{{ HTML::style('admin/css/select2-bootstrap.css') }}
+{{ HTML::style('admin/css/fileinput.min.css') }}
 {{ HTML::style('admin/css/AdminLTE.css') }}
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

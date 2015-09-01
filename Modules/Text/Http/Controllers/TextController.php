@@ -4,6 +4,7 @@ namespace Modules\Text\Http\Controllers;
 
 use Illuminate\Support\Facades\View;
 Use App\Controllers\Admin\AdminController;
+use Modules\Site\Entities\Site;
 Use Modules\Text\Entities\Text;
 Use Modules\Category\Entities\Category;
 Use Redirect, Input, Validator;
@@ -14,10 +15,15 @@ class TextController extends AdminController
 
     private $text;
     private $category;
+    /**
+     * @var Site
+     */
+    private $site;
 
-    public function __construct(Text $text, Category $category){
+    public function __construct(Text $text, Category $category, Site $site){
         $this->text = $text;
         $this->category = $category;
+        $this->site = $site;
         parent::__construct();
     }
     /**
@@ -25,15 +31,24 @@ class TextController extends AdminController
      *
      * @return Response
      */
-    public function index()
+    public function index($categoryId = false)
     {
-        return View::make('text::index');
+        $categories = $this->category->getForTexts();
+        $view = View::make('text::index')->with('categoryId', $categoryId)->with('categories', $categories);
+        if($categoryId){
+            $category = $this->category->find($categoryId)->first();
+            $view->with('lang', $category->lang);
+        }
+        return $view;
     }
 
-    public function getDatatable(){
+    public function getDatatable($categoryId = false){
         $Text = $this->text
             ->select(array('texts.id', 'categories.name AS category_name', 'texts.title', 'texts.key', 'texts.weight', 'texts.created_at'))
             ->leftJoin('categories','texts.category_id','=','categories.id');
+        if($categoryId)
+            $Text->where('texts.category_id', $categoryId);
+
         return \Datatables::of($Text)
             ->edit_column('category_name', function($row) {
                 if(!empty($row->category_name))
@@ -55,11 +70,28 @@ class TextController extends AdminController
      *
      * @return Response
      */
-    public function create()
+    public function create($categoryId = false)
     {
-        $categories = $this->category->all();
-        $select = array( 0 => '-' );
-        $select = $select + $categories->lists('name','id');
+
+        $categories = $this->category->where('parent', 0)->orderBy('site_id', 'asc')->orderBy('lang', 'asc')->orderBy('weight', 'asc')->get()->toArray();
+        foreach ($categories as $category) {
+            $site = $this->site->where('id', $category['site_id'])->first()->toArray();
+            $cat[$category['id']] = $site['name'] . ' -> ' . $category['lang'] . ' - ' . $category['name'];
+            $childs = $this->category->where('parent', $category['id'])->get()->toArray();
+            if (!empty($childs)) {
+                foreach ($childs as $k => $child) {
+                    $cat[$child['id']] = $site['name'] . ' -> ' . $category['lang'] . '- ' . $category['name'] . ' - ' . $child['name'];
+                    $childss = $this->category->where('parent', $child['id'])->get()->toArray();
+                    if (!empty($childss)) {
+                        foreach ($childss as $k => $child2) {
+                            $cat[$child2['id']] = $site['name'] . ' -> ' . $category['lang'] . '- ' . $category['name'] . ' - '.$child['name'].' - ' . $child2['name'];
+                        }
+                    }
+                }
+            }
+        }
+        $select = array(0 => '-');
+        $select = $select + $cat;
 
         return View::make('text::create')->with('select', $select );
     }
@@ -100,9 +132,25 @@ class TextController extends AdminController
      */
     public function edit($id)
     {
-        $categories = $this->category->all();
-        $select = array( 0 => '-' );
-        $select = $select + $categories->lists('name','id');
+        $categories = $this->category->where('parent', 0)->orderBy('site_id', 'asc')->orderBy('lang', 'asc')->orderBy('weight', 'asc')->get()->toArray();
+        foreach ($categories as $category) {
+            $site = $this->site->where('id', $category['site_id'])->first()->toArray();
+            $cat[$category['id']] = $site['name'] . ' -> ' . $category['lang'] . ' - ' . $category['name'];
+            $childs = $this->category->where('parent', $category['id'])->get()->toArray();
+            if (!empty($childs)) {
+                foreach ($childs as $k => $child) {
+                    $cat[$child['id']] = $site['name'] . ' -> ' . $category['lang'] . '- ' . $category['name'] . ' - ' . $child['name'];
+                    $childss = $this->category->where('parent', $child['id'])->get()->toArray();
+                    if (!empty($childss)) {
+                        foreach ($childss as $k => $child2) {
+                            $cat[$child2['id']] = $site['name'] . ' -> ' . $category['lang'] . '- ' . $category['name'] . ' - '.$child['name'].' - ' . $child2['name'];
+                        }
+                    }
+                }
+            }
+        }
+        $select = array(0 => '-');
+        $select = $select + $cat;
 
         $text = $this->text->find($id);
         return View::make('text::edit')->with('text', $text)->with('select', $select);

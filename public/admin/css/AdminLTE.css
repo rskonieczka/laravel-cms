@@ -3661,3 +3661,18 @@ fieldset[disabled] .btn-vk.active {
 .small-table .pagination a{padding: 4px 7px !important;}
 .small-table .input-sm{height: 23px;
     padding: 3px 2px;}
+
+ul.custom-list{
+  padding:0 5px;
+    list-style-type: none;
+}
+ul.custom-list li{
+    padding:1px 0;
+}
+ul.custom-list li a{
+    color:#00a65a;
+}
+ul.custom-list > li > ul{
+    padding:0 25px;
+    list-style-type: square;
+}

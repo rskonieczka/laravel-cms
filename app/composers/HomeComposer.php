@@ -1,11 +1,13 @@
 <?php
 
+use Modules\Knowledge\Entities\Knowledge;
+
 class HomeComposer {
 
     public function compose($view)
     {
-        $data = \Input::all();
-        //dd(\Input::all());
+        $knowledges = Knowledge::orderBy('created_at', 'desc')->take(3)->get();
+        $view->with('knowledges', $knowledges);
     }
 
 }

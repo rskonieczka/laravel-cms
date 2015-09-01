@@ -3,12 +3,35 @@
 namespace Modules\Category\Entities;
 
 Use Modules\Site\Entities\Site as Site;
+use App\Models\Traits\SearchableTrait;
+
 Use Url;
 
 class Category extends \Basemodel
 {
+    use SearchableTrait;
 
-    protected $fillable = array('name', 'parent', 'slug', 'weight', 'template_file', 'hide', 'site_id');
+    protected $searchable = [
+        'columns' => [
+            'texts.title' => 10,
+            'texts.content' => 10,
+            'knowledge.title' => 10,
+            'knowledge.content' => 10,
+            'knowledge.causes' => 1,
+            'knowledge.prevention' => 1,
+            'knowledge.repair' => 1,
+            'posts.title' => 10,
+            'posts.content' => 10
+        ],
+        'joins' => [
+            'texts' => ['categories.id','texts.category_id'],
+            'knowledge' => ['categories.id','knowledge.category_id'],
+            'posts' => ['categories.id','posts.category_id'],
+        ],
+    ];
+
+
+    protected $fillable = array('name', 'parent', 'slug', 'weight', 'template_file', 'hide', 'site_id', 'lang', 'device');
 
     protected $table = 'categories';
 
@@ -20,13 +43,29 @@ class Category extends \Basemodel
         'template_file' => 'required',
         'weight' => 'required',
         'parent' => 'required',
+        'lang' => 'required',
     );
+
+    public function texts()
+    {
+        return $this->hasMany('Modules\Text\Entities\Text');
+    }
+
+    public function knowledge()
+    {
+        return $this->hasMany('Modules\Knowledge\Entities\Knowledge');
+    }
+
+    public function posts()
+    {
+        return $this->hasMany('Modules\Post\Entities\Post');
+    }
+
 
     public function parent()
     {
         return $this->belongsTo($this->table, 'parent');
     }
-
 
     public function site()
     {
@@ -43,9 +82,25 @@ class Category extends \Basemodel
         $sites = Site::all();
         $nestables = array();
         foreach($sites as $site){
-            $categories = $this->where('site_id', $site->id)->orderBy('weight')->get();
-            $nestables[$site->id]['site'] = $site;
-            $nestables[$site->id]['nestable'] = $this->buildMenu($categories);
+            foreach(\Config::get('app.langs') as $k2 => $n2){
+                $categories = $this->where('site_id', $site->id)->where('lang', $n2)->orderBy('weight')->get();
+                $nestables[$site->id][$n2]['site'] = $site;
+                $nestables[$site->id][$n2]['nestable'] = $this->buildMenu($categories);
+            }
+        }
+        return $nestables;
+    }
+
+    public function getForTexts()
+    {
+        $sites = Site::all();
+        $nestables = array();
+        foreach($sites as $site){
+            foreach(\Config::get('app.langs') as $k2 => $n2){
+                $categories = $this->where('site_id', $site->id)->where('lang', $n2)->orderBy('weight')->get();
+                $nestables[$site->id][$n2]['site'] = $site;
+                $nestables[$site->id][$n2]['nestable'] = $this->buildMenuTexts($categories);
+            }
         }
         return $nestables;
     }
@@ -76,6 +131,18 @@ class Category extends \Basemodel
       </div>" . $this->buildMenu($menu, $item->id, $item->slug) . "</li>";
             }
         return $result ? "\n<ol class=\"dd-list\">\n$result</ol>\n" : null;
+    }
+
+    public function buildMenuTexts($menu, $parentid = 0, $slug = '')
+    {
+        $result = null;
+        foreach ($menu as $item)
+            if ($item->parent == $parentid) {
+                $result .= "<li>";
+                $url = \URL::to("/admin/text/" . $item->id);
+                $result .= "<a href='".$url."'>{$item->name} <small style='color:#bbb;'><i>{$item->slug}</i></small></a>" . $this->buildMenuTexts($menu, $item->id, $item->slug) . "</li>";
+            }
+        return $result ? "\n<ul class='custom-list'>\n$result</ul>\n" : null;
     }
 
 

@@ -1,0 +1,15 @@
+{
+	"name": "pingpong-modules/kontaktperson",
+	"description": "",
+	"authors": [
+		{
+			"name": "Pingpong Labs",
+			"email": "pingpong.labs@gmail.com"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"Modules\\Kontaktperson\\": ""
+		}
+	}
+}

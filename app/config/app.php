@@ -52,20 +52,31 @@ return array(
 	|
 	*/
 
-	'locale' => 'pl',
+    'locale' => 'pl',
 
-	/*
-	|--------------------------------------------------------------------------
-	| Application Fallback Locale
-	|--------------------------------------------------------------------------
-	|
-	| The fallback locale determines the locale to use when the current one
-	| is not available. You may change the value to correspond to any of
-	| the language folders that are provided through your application.
-	|
-	*/
+    /**
+     * List of alternative languages (not including the one specified as 'locale')
+     */
+    'alt_langs' => array ('en','ru','de','ch','fr'),
+    'langs' => array ('pl','en','ru','de','ch','fr'),
+    'langs_keys' => array ('Polski'=>'pl','Angielski'=>'en','Rosyjski'=>'ru','Niemiecki'=>'de','Chiński'=>'ch','Francuski'=>'fr'),
+    /**
+     *  Prefix of selected locale  - leave empty (set in runtime)
+     */
+    'locale_prefix' => '',
 
-	'fallback_locale' => 'pl',
+    /*
+    |--------------------------------------------------------------------------
+    | Application Fallback Locale
+    |--------------------------------------------------------------------------
+    |
+    | The fallback locale determines the locale to use when the current one
+    | is not available. You may change the value to correspond to any of
+    | the language folders that are provided through your application.
+    |
+    */
+
+    'fallback_locale' => 'pl',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -93,7 +104,7 @@ return array(
 	|
 	*/
 
-	'providers' => array(
+	'providers' => [
 
 		'Illuminate\Foundation\Providers\ArtisanServiceProvider',
 		'Illuminate\Auth\AuthServiceProvider',
@@ -129,8 +140,8 @@ return array(
         'Devfactory\Imagecache\ImagecacheServiceProvider',
         'Pingpong\Modules\ModulesServiceProvider',
         'Schickling\Backup\BackupServiceProvider',
-        'Artforwebs\Ankietkaapi\AnkietkaapiServiceProvider'
-	),
+        'Cocur\Slugify\Bridge\Laravel\SlugifyServiceProvider',
+    ],
 
 	/*
 	|--------------------------------------------------------------------------
@@ -200,7 +211,8 @@ return array(
         'Datatables'      => 'Bllim\Datatables\Facade\Datatables',
         'Imagecache'      => 'Devfactory\Imagecache\Facades\ImagecacheFacade',
         'Module'            =>  'Pingpong\Modules\Facades\Module',
-		'Ankietkaapi'            =>  'Artforwebs\Ankietkaapi\Facades\AnkietkaapiFacade'
+		'Ankietkaapi'            =>  'Artforwebs\Ankietkaapi\Facades\AnkietkaapiFacade',
+        'Slugify' => 'Cocur\Slugify\Bridge\Laravel\SlugifyFacade',
 
 	],
 

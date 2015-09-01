@@ -46,13 +46,28 @@
                         </div>
                         <div class="form-group @if ($errors->has('category_id')) has-error @endif">
                             {{ Form::label('category_id', 'Kategoria') }}
-                            {{ Form::select('category_id', $select, Input::old('category_id'), array('class' => 'form-control', 'id' => 'parent')) }}
+                            {{ Form::select('category_id', $select, Input::old('category_id'), array('class' => 'form-control', 'id' => 'select2')) }}
                             @if ($errors->has('category_id')) <p class="help-block">{{ $errors->first('category_id') }}</p> @endif
                         </div>
                         <div class="form-group @if ($errors->has('content')) has-error @endif">
                             {{ Form::label('content', 'Tresc') }}
                             {{ Form::textarea('content', Input::old('content'), array('class' => 'form-control', 'id' => 'wysihtml5', 'placeholder' => 'Tresc') ) }}
                             @if ($errors->has('content')) <p class="help-block">{{ $errors->first('content') }}</p> @endif
+                        </div>
+                        <div class="form-group @if ($errors->has('tags')) has-error @endif">
+                            {{ Form::label('tags', 'Tagi') }}
+                            {{ Form::textarea('tags', Input::old('tags'), array('class' => 'form-control', 'placeholder' => 'Tagi') ) }}
+                            @if ($errors->has('tags')) <p class="help-block">{{ $errors->first('tags') }}</p> @endif
+                        </div>
+                        <div class="form-group @if ($errors->has('badges')) has-error @endif">
+                            {{ Form::label('badges', 'Parametry obrazki') }}
+                            {{ Form::textarea('badges', Input::old('badges'), array('class' => 'form-control', 'placeholder' => 'Parametry obrazki') ) }}
+                            @if ($errors->has('badges')) <p class="help-block">{{ $errors->first('badges') }}</p> @endif
+                        </div>
+                        <div class="form-group @if ($errors->has('parameters')) has-error @endif">
+                            {{ Form::label('parameters', 'Parametry tabela') }}
+                            {{ Form::textarea('parameters', Input::old('parameters'), array('class' => 'form-control', 'id' => 'wysihtml6', 'placeholder' => 'Parametry tabela') ) }}
+                            @if ($errors->has('parameters')) <p class="help-block">{{ $errors->first('parameters') }}</p> @endif
                         </div>
                         {{ Form::button('Dodaj', array('class' => 'btn btn-success btn-flat', 'type' => 'submit') ) }}
                     </div>
@@ -69,5 +84,6 @@
 @section('extrascripts')
 <script type="text/javascript">
     CKEDITOR.replace('wysihtml5');
+    $(document).ready(function() { $("#select2").select2(); });
 </script>
 @stop

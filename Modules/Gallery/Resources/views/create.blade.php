@@ -46,14 +46,13 @@
                         </div>
                         <div class="form-group @if ($errors->has('category_id')) has-error @endif">
                             {{ Form::label('category_id', 'Kategoria') }}
-                            {{ Form::select('category_id', $select, Input::old('category_id'), array('class' => 'form-control', 'id' => 'parent')) }}
+                            {{ Form::select('category_id', $select, Input::old('category_id'), array('class' => 'form-control', 'id' => 'select2')) }}
                             @if ($errors->has('category_id')) <p class="help-block">{{ $errors->first('category_id') }}</p> @endif
                         </div>
                          <div class="form-group @if ($errors->has('photos')) has-error @endif">
                             @include('media::shared.list')
                             @if ($errors->has('photos')) <p class="help-block">{{ $errors->first('photos') }}</p> @endif
                         </div>
-
                         {{ Form::button('Dodaj galerię', array('class' => 'btn btn-success btn-flat', 'type' => 'submit') ) }}
                         {{ Form::close() }}
                     </div>
@@ -66,7 +65,8 @@
 
 @stop
 
-@section('extrascripts')
+@section('extrascripts2')
 <script type="text/javascript">
+    $(document).ready(function() { $("#select2").select2(); });
 </script>
 @stop

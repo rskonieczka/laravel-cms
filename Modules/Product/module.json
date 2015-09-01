@@ -1,0 +1,23 @@
+{
+  "name": "Product",
+  "alias": "product",
+  "description": "",
+  "keywords": [],
+  "active": 1,
+  "priority": 5,
+  "core": 0,
+  "menu": {
+    "content": {
+      "admin.product.index": "Produkty"
+    }
+  },
+  "required": [
+    "Site",
+    "Category",
+    "Media"
+  ],
+  "providers": [],
+  "files": [
+    "start.php"
+  ]
+}

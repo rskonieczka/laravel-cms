@@ -20,73 +20,37 @@
  */
 return array(
 
-    '100x100' => array(
-        'width' => 100,
-        'height' => 100,
-        'aspect_ratio' => 1,
-    ),
 
+	'relatedProducts' => array(
+        'width' => 180,
+        'height' => 180,
+		'method' => 'resize',
+		'background_color' => '#ffffff',
+    ),
     'teaser' => array(
         'width' => 150,
         'height' => 100,
         'aspect_ratio' => 1.5,
-    ),
-    '465x320' => array(
-        'width' => 465,
-        'height' => 320,
-        'aspect_ratio' => 465 / 320,
-    ),
-    'post' => array(
-        'width' => 750,
-        'height' => 468,
-        'aspect_ratio' => 750 / 468,
-    ),
-    'panel' => array(
-        'width' => 293,
-        'height' => 197,
-        'aspect_ratio' => 293 / 197,
+        'method' => 'resize',
     ),
     'medialist' => array(
         'width' => 50,
         'height' => 50,
         'aspect_ratio' => 50 / 50,
+        'method' => 'crop',
     ),
-    '780x400' => array(
-        'width' => 780,
-        'height' => 400,
-        'aspect_ratio' => 780 / 400,
+    'searchlist' => array(
+        'width' => 265,
+        'height' => 225,
+        'aspect_ratio' => 1.5,
+        'method' => 'resize',
+        'background_color' => '#ffffff',
     ),
-    '780x280' => array(
-        'width' => 780,
-        'height' => 280,
-        'aspect_ratio' => 780 / 280,
-    ),
-    '390x400' => array(
-        'width' => 390,
-        'height' => 400,
-        'aspect_ratio' => 390 / 400,
-    ),
-    '390x280' => array(
-        'width' => 390,
-        'height' => 280,
-        'aspect_ratio' => 390 / 280,
-    ),
-    '390x200' => array(
-        'width' => 390,
-        'height' => 200,
-        'aspect_ratio' => 390 / 200
-    ),
-	'390x560' => array(
-		'width' => 390,
-		'height' => 560,
-		'aspect_ratio' => 390 / 560,
-	),
-	'601x414' => array(
-		'width' => 601,
-		'height' => 414,
-		'aspect_ratio' => 601 / 414,
-	),
-
-
+    'post' => array(
+        'width' => 378,
+        'height' => 240,
+        'aspect_ratio' => 378 / 240,
+        'method' => 'crop',
+    )
 
 );

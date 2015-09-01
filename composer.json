@@ -10,14 +10,18 @@
         "cartalyst/sentry": "2.1.*",
 		"barryvdh/laravel-ide-helper": "~1.11",
         "bllim/datatables": "*",
-        "devfactory/imagecache": "2.0.*",
+        "devfactory/imagecache": "2.1.*",
         "pingpong/modules": "~1",
         "mockery/mockery": "dev-master@dev",
-		"schickling/backup": "0.6.*"
+		"schickling/backup": "0.6.*",
+		"cocur/slugify": "^1.1",
+		"solidew/spaceless-blade": "^1.0",
+        "nicolaslopezj/searchable": "1.*"
 	},
 	"autoload": {
 		"classmap": [
 			"app/commands",
+            "app/presenters",
             "app/composers",
 			"app/controllers",
             "app/controllers/admin",

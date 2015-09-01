@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-
+use Modules\Knowledge\Entities\Knowledge;
+use Modules\Category\Entities\Category;
 
 App::error(function (ModelNotFoundException $e) {
     if ($e->getModel() === 'Modules\Category\Entities\Category') {
@@ -9,9 +10,6 @@ App::error(function (ModelNotFoundException $e) {
     }
 });
 
-App::error(function ($e) {
-    return View::make('403');
-});
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +41,22 @@ App::after(function ($request, $response) {
 | integrates HTTP Basic authentication for quick, simple checking.
 |
 */
+Route::filter('knowledge', function()
+{
+    $currentRoute = Route::current();
+    $params = $currentRoute->parameters();
+    if (!isset($params['id']))
+    {
+        $category = Category::where(['slug' => $params['slug'], 'lang' => App::getLocale()])->first();
+        $knowledge = Knowledge::where('category_id', $category->id)->orderBy('created_at', 'asc')->first();
+        if(count($knowledge) == 0){
+            return \Redirect::to(trans('common.lang_prefix'));
+        }
+        $title = \Slugify::slugify($knowledge->title);
+        return \Redirect::to(trans('common.lang_prefix').$category->slug.'/'.$knowledge->id.'/'.$title);
+        //Slugify::slugify($news->title)
+    }
+});
 
 Route::filter('auth.login', function () {
     $user = Sentry::getUser();

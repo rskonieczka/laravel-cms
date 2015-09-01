@@ -37,27 +37,30 @@
                         <b>Sukces!</b> {{  Session::get('message') }}
                     </div>
                 @endif
-
-                        <div class="nav-tabs-custom">
-                            <ul class="nav nav-tabs">
-                            @foreach ($nestable as $n)
-                                    <li @if (Str::snake($n['site']->name) == 'front') class="active" @endif>
-                                        <a href="#{{ Str::snake($n['site']->name) }}" aria-controls="home" role="tab" data-toggle="tab">{{ $n['site']->name }}</a>
-                                    </li>
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                    @foreach ($nestable as $k => $n)
+                            @foreach (Config::get('app.langs') as $k2 => $n2)
+                            <li @if ($k == 1 && $k2 == 0) class="active" @endif>
+                                <a href="#{{ Str::snake($n[$n2]['site']->name.'-'.$n2) }}" aria-controls="home" role="tab" data-toggle="tab">{{ $n[$n2]['site']->name }} [{{ $n2 }}]</a>
+                            </li>
                             @endforeach
-                                <li class="pull-right"><a href="{{ URL::route('admin.category.create') }}" class="btn btn-sm btn-flat">Dodaj nową kategorię</a></li>
-                            </ul>
-                            <div class="tab-content">
-                                @foreach ($nestable as $n)
-                                <div class="tab-pane @if (Str::snake($n['site']->name) == 'front') active @endif" id="{{ Str::snake($n['site']->name) }}">
-                                    <div class="dd" id="nestable{{ $n['site']->id }}">
-                                      {{ $n['nestable'] }}
-                                    </div>
-                                    <div class="clearfix"></div>
+                    @endforeach
+                        <li class="pull-right"><a href="{{ URL::route('admin.category.create') }}" class="btn btn-sm btn-flat">Dodaj nową kategorię</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        @foreach ($nestable as $k => $n)
+                            @foreach (Config::get('app.langs') as $k2 => $n2)
+                            <div class="tab-pane @if ($k == 1 && $k2 == 0) active @endif" id="{{ Str::snake($n[$n2]['site']->name.'-'.$n2) }}">
+                                <div class="dd" id="nestable{{ $n[$n2]['site']->id }}-{{ $n2 }}">
+                                  {{ $n[$n2]['nestable'] }}
                                 </div>
-                                @endforeach
+                                <div class="clearfix"></div>
                             </div>
-                        </div>
+                            @endforeach
+                        @endforeach
+                    </div>
+                </div>
             </div><!-- ./col -->
         </div><!-- /.row -->
 
@@ -71,7 +74,8 @@
 <script type="text/javascript">
     $(document).ready(function() {
         @foreach ($nestable as $n)
-         $('#nestable{{ $n['site']->id }}').nestable({
+        @foreach (Config::get('app.langs') as $k2 => $n2)
+         $('#nestable{{ $n[$n2]['site']->id }}-{{$n2}}').nestable({
             dropCallback: function(details) {
 
                var order = new Array();
@@ -82,7 +86,7 @@
 
                if (order.length === 0){
                 var rootOrder = new Array();
-                $("#nestable{{ $n['site']->id }} > ol > li").each(function(index,elem) {
+                $("#nestable{{ $n[$n2]['site']->id }} > ol > li").each(function(index,elem) {
                   rootOrder[index] = $(elem).attr('data-id');
                 });
                }
@@ -114,6 +118,19 @@
               $.post("/admin/category/unhide/"+id);
                });
         @endforeach
+        @endforeach
+
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+                    if(history.pushState)
+                        history.pushState(null, null, '#'+$(e.target).attr('href').substr(1));
+                    else
+                        location.hash = '#' + $(e.target).attr('href').substr(1);
+                });
+
+        if(window.location.hash){
+            $('ul.nav-tabs').find('a[href="'+window.location.hash+'"]').tab('show');
+        }
+
     } );
 </script>
 @stop

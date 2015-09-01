@@ -55,7 +55,7 @@ $artisan = Illuminate\Console\Application::start($app);
 | or another output device for the developers. Here goes nothing!
 |
 */
-
+Artisan::add(new createdb);
 $status = $artisan->run();
 
 /*

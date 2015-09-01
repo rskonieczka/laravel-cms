@@ -6,17 +6,28 @@ use Illuminate\Support\Facades\View;
 Use App\Controllers\Admin\AdminController;
 Use Modules\Gallery\Entities\Gallery;
 Use Modules\Category\Entities\Category;
+use Modules\Site\Entities\Site;
 Use Redirect, Validator, Input;
 
 class GalleryController extends AdminController
 {
 
     private $gallery;
+    /**
+     * @var Category
+     */
+    private $category;
+    /**
+     * @var Site
+     */
+    private $site;
 
-    public function __construct(Gallery $gallery)
+    public function __construct(Gallery $gallery, Category $category, Site $site)
     {
         parent::__construct();
         $this->gallery = $gallery;
+        $this->category = $category;
+        $this->site = $site;
     }
 
     /**
@@ -56,9 +67,25 @@ class GalleryController extends AdminController
      */
     public function create()
     {
-        $categories = Category::all();
+        $categories = $this->category->where('parent', 0)->orderBy('site_id', 'asc')->orderBy('lang', 'asc')->orderBy('weight', 'asc')->get()->toArray();
+        foreach ($categories as $category) {
+            $site = $this->site->where('id', $category['site_id'])->first()->toArray();
+            $cat[$category['id']] = $site['name'] . ' -> ' . $category['lang'] . ' - ' . $category['name'];
+            $childs = $this->category->where('parent', $category['id'])->get()->toArray();
+            if (!empty($childs)) {
+                foreach ($childs as $k => $child) {
+                    $cat[$child['id']] = $site['name'] . ' -> ' . $category['lang'] . '- ' . $category['name'] . ' - ' . $child['name'];
+                    $childss = $this->category->where('parent', $child['id'])->get()->toArray();
+                    if (!empty($childss)) {
+                        foreach ($childss as $k => $child2) {
+                            $cat[$child2['id']] = $site['name'] . ' -> ' . $category['lang'] . '- ' . $category['name'] . ' - '.$child['name'].' - ' . $child2['name'];
+                        }
+                    }
+                }
+            }
+        }
         $select = array( 0 => '-' );
-        $select = $select + $categories->lists('name','id');
+        $select = $select + $cat;
 
         return View::make('gallery::create')->with('select', $select );
     }
@@ -117,9 +144,26 @@ class GalleryController extends AdminController
      */
     public function edit($id)
     {
-        $categories = Category::all();
+        $categories = $this->category->where('parent', 0)->orderBy('site_id', 'asc')->orderBy('lang', 'asc')->orderBy('weight', 'asc')->get()->toArray();
+        foreach ($categories as $category) {
+            $site = $this->site->where('id', $category['site_id'])->first()->toArray();
+            $cat[$category['id']] = $site['name'] . ' -> ' . $category['lang'] . ' - ' . $category['name'];
+            $childs = $this->category->where('parent', $category['id'])->get()->toArray();
+            if (!empty($childs)) {
+                foreach ($childs as $k => $child) {
+                    $cat[$child['id']] = $site['name'] . ' -> ' . $category['lang'] . '- ' . $category['name'] . ' - ' . $child['name'];
+                    $childss = $this->category->where('parent', $child['id'])->get()->toArray();
+                    if (!empty($childss)) {
+                        foreach ($childss as $k => $child2) {
+                            $cat[$child2['id']] = $site['name'] . ' -> ' . $category['lang'] . '- ' . $category['name'] . ' - '.$child['name'].' - ' . $child2['name'];
+                        }
+                    }
+                }
+            }
+        }
         $select = array( 0 => '-' );
-        $select = $select + $categories->lists('name','id');
+        $select = $select + $cat;
+
         $gallery = $this->gallery->find($id);
 
         $mediaListData = $gallery->media;

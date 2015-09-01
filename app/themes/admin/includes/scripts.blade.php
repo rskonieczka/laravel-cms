@@ -10,11 +10,14 @@
 {{ HTML::script('admin/js/plugins/jqueryKnob/jquery.knob.js') }}
 {{ HTML::script('admin/js/plugins/daterangepicker/daterangepicker.js') }}
 {{ HTML::script('admin/js/plugins/datepicker/bootstrap-datepicker.js') }}
-{{ HTML::script('//cdn.ckeditor.com/4.4.3/standard/ckeditor.js') }}
+{{ HTML::script('//cdn.ckeditor.com/4.4.3/full/ckeditor.js') }}
 {{ HTML::script('admin/js/plugins/iCheck/icheck.min.js') }}
 {{ HTML::script('admin/js/plugins/datatables/jquery.dataTables.js') }}
 {{ HTML::script('admin/js/plugins/datatables/dataTables.bootstrap.js') }}
 {{ HTML::script('admin/js/dropzone.js') }}
+{{ HTML::script('admin/js/select2.js') }}
+{{ HTML::script('admin/js/fileinput.js') }}
+{{ HTML::script('admin/js/fileinput_locale_pl.js') }}
 {{ HTML::script('admin/js/laravel.js') }}
 {{ HTML::script('admin/js/AdminLTE/app.js') }}
 {{--{{ HTML::script('admin/js/AdminLTE/dashboard.js') }}--}}

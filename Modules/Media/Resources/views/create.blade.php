@@ -37,9 +37,9 @@
                         </div>
                         <div class="form-group">
                             {{ Form::label('file', 'Plik') }}
-                            {{ Form::file('file', NULL, array('class' => 'form-control', 'id' => 'file') ) }}
+                            {{ Form::file('files[]', array('class' => 'form-control', 'id' => 'input-5', 'multiple', 'class' => 'file-loading') ) }}
                         </div>
-                        {{ Form::button('Dodaj', array('class' => 'btn btn-success btn-flat', 'type' => 'submit') ) }}
+
                     </div>
                     {{ Form::close() }}
                 </div>
@@ -53,6 +53,6 @@
 
 @section('extrascripts')
 <script type="text/javascript">
-    CKEDITOR.replace('wysihtml5');
+    $("#input-5").fileinput({language: "pl"});
 </script>
 @stop
