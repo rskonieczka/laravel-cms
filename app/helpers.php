@@ -219,13 +219,3 @@ function isExternal($link)
     }
     return false;
 }
-
-function renderCardLink($dir, $fileName, $langPrefix)
-{
-    if (File::exists('./'.$dir.$langPrefix.$fileName))
-    {
-        return URL::to($dir.$langPrefix.$fileName);
-    }else{
-        return URL::to($dir.$fileName);
-    }
-}

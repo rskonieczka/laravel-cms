@@ -55,9 +55,9 @@ return array(
 
 		'mysql' => array(
             'driver'    => 'mysql',
-            'host'      => '10.10.29.81',
-            'database'  => 'novol',
-            'username'  => 'root',
+            'host'      => '',
+            'database'  => '',
+            'username'  => '',
             'password'  => '',
             'charset'   => 'utf8',
             'collation' => 'utf8_general_ci',
