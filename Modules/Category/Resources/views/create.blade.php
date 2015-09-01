@@ -72,7 +72,7 @@
                         </div>
                         <div class="form-group @if ($errors->has('lang')) has-error @endif">
                             {{ Form::label('lang', 'Język') }}
-                            {{ Form::select('lang', ['en' => 'en', 'pl' => 'pl', 'de' => 'de', 'ru' => 'ru', 'ch' => 'ch', 'fr' => 'fr'], null, array('class' => 'form-control', 'id' => 'lang')) }}
+                            {{ Form::select('lang', ['pl' => 'pl', 'en' => 'en'], null, array('class' => 'form-control', 'id' => 'lang')) }}
                             @if ($errors->has('slug')) <p class="help-block">{{ $errors->first('lang') }}</p> @endif
                         </div>
                         <div class="form-group">

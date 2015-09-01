@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Laravel - CMS</title>
-    {{ HTML::style('front/css/bootstrap.css') }}
+    {{ HTML::style('default') }}
     {{ HTML::style('front/css/bootstrap-theme.css') }}
     <!--[if lt IE 9]>
     {{ HTML::script('front/js/html5shiv.min.js') }}

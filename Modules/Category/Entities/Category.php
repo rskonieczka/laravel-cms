@@ -3,32 +3,11 @@
 namespace Modules\Category\Entities;
 
 Use Modules\Site\Entities\Site as Site;
-use App\Models\Traits\SearchableTrait;
 
 Use Url;
 
 class Category extends \Basemodel
 {
-    use SearchableTrait;
-
-    protected $searchable = [
-        'columns' => [
-            'texts.title' => 10,
-            'texts.content' => 10,
-            'knowledge.title' => 10,
-            'knowledge.content' => 10,
-            'knowledge.causes' => 1,
-            'knowledge.prevention' => 1,
-            'knowledge.repair' => 1,
-            'posts.title' => 10,
-            'posts.content' => 10
-        ],
-        'joins' => [
-            'texts' => ['categories.id','texts.category_id'],
-            'knowledge' => ['categories.id','knowledge.category_id'],
-            'posts' => ['categories.id','posts.category_id'],
-        ],
-    ];
 
 
     protected $fillable = array('name', 'parent', 'slug', 'weight', 'template_file', 'hide', 'site_id', 'lang', 'device');

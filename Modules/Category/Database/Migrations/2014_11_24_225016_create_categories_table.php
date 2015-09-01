@@ -22,6 +22,7 @@ class CreateCategoriesTable extends Migration
             $table->integer('parent');
             $table->integer('weight');
             $table->integer('hide');
+            $table->enum('device', array('all', 'desktop', 'mobile'));
             $table->string('lang', 20);
             $table->timestamps();
         });

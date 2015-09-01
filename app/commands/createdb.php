@@ -41,6 +41,7 @@ class createdb extends Command {
         $this->call('migrate', array('--package' => 'cartalyst/sentry', '--force' => true));
         $this->call('module:migrate', array('--force' => true));
         $this->call('db:seed', array('--force' => true));
+        $this->call('module:seed');
 	}
 
 }

@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use Modules\Site\Entities\Site;
 
 class SiteDatabaseSeeder extends Seeder {
 
@@ -13,8 +15,9 @@ class SiteDatabaseSeeder extends Seeder {
 	public function run()
 	{
 		Model::unguard();
-		
-		// $this->call("OthersTableSeeder");
+
+        DB::table('sites')->delete();
+        Site::create(array('name' => 'default', 'domain' => Request::root(), 'theme' => 'default'));
 	}
 
 }

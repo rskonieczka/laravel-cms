@@ -39,6 +39,7 @@ class CategoryController extends AdminController
      */
     public function create()
     {
+        $cat = array();
         $categories = $this->category->where('parent', 0)->orderBy('site_id', 'asc')->orderBy('lang', 'asc')->orderBy('weight', 'asc')->get()->toArray();
         foreach ($categories as $category) {
             $site = $this->site->where('id', $category['site_id'])->first()->toArray();
@@ -57,7 +58,7 @@ class CategoryController extends AdminController
             }
         }
         $select = array( 0 => '-' );
-        $select = $select + $cat;
+        $select = array_merge($select, $cat);
 
         $sites = $this->site->all();
         $site_select = $sites->lists('name', 'id');
@@ -177,6 +178,7 @@ class CategoryController extends AdminController
     public function edit($id)
     {
 
+        $cat = array();
         $categories = $this->category->where('id', '!=', $id)->where('parent', 0)->orderBy('site_id', 'asc')->orderBy('lang', 'asc')->orderBy('weight', 'asc')->get()->toArray();
         foreach ($categories as $category) {
             $site = $this->site->where('id', $category['site_id'])->first()->toArray();
@@ -195,7 +197,7 @@ class CategoryController extends AdminController
             }
         }
         $select = array( 0 => '-' );
-        $select = $select + $cat;
+        $select = array_merge($select, $cat);
 
         $sites = $this->site->all();
         $site_select = $sites->lists('name', 'id');

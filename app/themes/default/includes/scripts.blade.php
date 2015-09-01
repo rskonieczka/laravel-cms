@@ -1,6 +1,6 @@
 <!-- scripts bellow -->
 {{ HTML::script('front/js/jquery.min.js') }}
-{{ HTML::script('front/bootstrap/js/bootstrap.min.js') }}
+{{ HTML::script('default') }}
 {{ HTML::script('front/js/jquery.easing.1.3.js') }}
 <!-- IE -->
 {{ HTML::script('front/js/modernizr.custom.js') }}

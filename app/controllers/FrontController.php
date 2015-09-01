@@ -7,8 +7,6 @@ use Modules\Gallery\Entities\Gallery;
 Use Modules\Site\Entities\Site;
 Use Modules\Category\Entities\Category;
 Use Modules\Text\Entities\Text;
-Use Modules\Knowledge\Entities\Knowledge;
-use Modules\Product\Entities\Product;
 use View, Response, Slugify, Route;
 
 class FrontController extends \Controller
@@ -17,7 +15,6 @@ class FrontController extends \Controller
     private $slug;
     private $category;
     private $site_id;
-    private $crumbsParent = 0;
 
     public function __construct()
     {
@@ -33,19 +30,6 @@ class FrontController extends \Controller
         $key = \File::get(base_path().'/.assetic');
 
         return $key;
-    }
-
-    private function checkRedirect($key){
-        $routes = array(
-            'karty-techniczne-i-bezpieczenstwa' => 'dokument/26/szpachlowki',
-            'technical-and-safety-data-sheets' => 'document/450/putties',
-            'technical-and-safety-data-sheets-ru' => 'document/450/putties',
-            'dokumentacja' => 'document/26/szpachlowki',
-        );
-        if(isset($routes[$key]) && !empty($routes[$key])){
-            return \Redirect::to($routes[$key]);
-        }
-        return false;
     }
 
     private function loadPage()
@@ -67,9 +51,6 @@ class FrontController extends \Controller
     public function index($slug = false, $id = false)
     {
         $this->slug = $slug;
-        if($res = $this->checkRedirect($slug)){
-            return $res;
-        }
         $this->loadPage();
         $currentFullLang = \App::getLocale();
         $currentFullLang = trans('common.navbar_' . $currentFullLang . '_long');
@@ -140,22 +121,9 @@ class FrontController extends \Controller
         if ($this->category->template_file == "news.single") {
             $post = Post::where('id', $params['id'])->first();
             return "<li>" . $post->title . "</li>";
-        } elseif ($this->category->template_file == "knowledge") {
-            $knowledge = Knowledge::where('id', $params['id'])->first();
-            return "<li>" . $knowledge->title . "</li>";
         }elseif ($this->category->template_file == "products.list") {
             $category = Category::where('id', $params['id'])->first();
             return "<li>" . $category->name . "</li>";
-        } elseif ($this->category->template_file == "products.single") {
-            $product = Product::select(['products.name','products.id', 'categories.name as category_name'
-                , 'categories.id as category_id', 'categories.slug', 'categories.parent as parent_id'])
-                ->leftJoin('products_category','products_category.product_id','=','products.id')
-                ->leftJoin('categories','categories.id','=','products_category.category_id')
-                ->where('products.id', $params['id'])->with('gallery')->first();
-            if($product->parent_id != 0){
-                $this->crumbsParent = $product->parent_id;
-            }
-            return "<li><a href='" . \URL::to(\Lang::get('routes.professional_products').$product->category_id.'/'.$product->slug) . "'>" .$product->category_name. "</a></li><li>" . $product->name . "</li>";
         } else {
             return "<li>" . $this->category->name . "</li>";
         }
@@ -263,9 +231,6 @@ class FrontController extends \Controller
         foreach ($categories as $category) {
             if (Category::where('parent', $category->id)->count() > 0) {
                 $category->childs = $this->getNavbarItems($category->id);
-            }else{
-                $category->products = Product::leftJoin('products_category','products.id','=','products_category.product_id')
-                    ->where('products_category.category_id', $category->id)->orderBy('products.name')->get();
             }
         }
         return $categories;
@@ -305,7 +270,6 @@ class FrontController extends \Controller
         $category = Category::where('id', $parentId)
             ->where(array('hide' => 0, 'site_id' => $this->site_id, 'lang' => \App::getLocale()))->first();
 
-
 		if(!$category)
 			return $parentId;
 		
@@ -320,22 +284,13 @@ class FrontController extends \Controller
     {
         //@todo dorobic do backendu budowanie sidebaru
         $categoryId = $this->getParentId();
-        if($this->category->slug == 'dokument'){
-            $categoryId = '22';
-        }
+
         $categories = Category::where('parent', $categoryId)
             ->where(array('hide' => 0, 'site_id' => $this->site_id, 'lang' => \App::getLocale()))
             ->orderBy('weight')->get();
 
         foreach ($categories as $category) {
             $category->childs = Category::where('parent', $category->id)->orderBy('weight')->get();
-            $knowledges = Knowledge::where('category_id', $category->id)->get();
-
-            if (count($knowledges) > 0) {
-                $category->knowledges = $knowledges;
-            } else {
-                $category->knowledges = null;
-            }
 
             foreach ($category->childs as $category2) {
                 $category2->childs = Category::where('parent', $category2->id)->orderBy('weight')->get();
@@ -355,13 +310,6 @@ class FrontController extends \Controller
 
         foreach ($categories as $category) {
             $category->childs = Category::where('parent', $category->id)->orderBy('weight')->get();
-            $knowledges = Knowledge::where('category_id', $category->id)->get();
-
-            if (count($knowledges) > 0) {
-                $category->knowledges = $knowledges;
-            } else {
-                $category->knowledges = null;
-            }
 
             foreach ($category->childs as $category2) {
                 $category2->childs = Category::where('parent', $category2->id)->orderBy('weight')->get();

@@ -13,7 +13,7 @@ return array(
 	|
 	*/
 
-	'debug' => true,
+	'debug' => false,
 
 	/*
 	|--------------------------------------------------------------------------
@@ -57,9 +57,9 @@ return array(
     /**
      * List of alternative languages (not including the one specified as 'locale')
      */
-    'alt_langs' => array ('en','ru','de','ch','fr'),
-    'langs' => array ('pl','en','ru','de','ch','fr'),
-    'langs_keys' => array ('Polski'=>'pl','Angielski'=>'en','Rosyjski'=>'ru','Niemiecki'=>'de','Chiński'=>'ch','Francuski'=>'fr'),
+    'alt_langs' => array (),
+    'langs' => array ('pl'),
+    'langs_keys' => array ('Polski'=>'pl'),
     /**
      *  Prefix of selected locale  - leave empty (set in runtime)
      */

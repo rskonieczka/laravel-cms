@@ -1,23 +1,9 @@
 <?php
 
 namespace Modules\Text\Entities;
-use App\Models\Traits\SearchableTrait;
 
 class Text extends \Basemodel
 {
-
-    use SearchableTrait;
-
-    protected $searchable = [
-        'columns' => [
-            'texts.title' => 10,
-            'texts.content' => 10,
-            'categories.site_id' => 1
-        ],
-        'joins' => [
-            'categories' => ['categories.id','texts.category_id']
-        ]
-    ];
 
     protected $fillable = array('title', 'key', 'content', 'category_id', 'weight');
 
